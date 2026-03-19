@@ -18,6 +18,7 @@ import EnterTokenPage from "../pages/EnterTokenPage.jsx";
 import AccountDetailsPage from "../pages/AccountDetailsPage.jsx";
 import CreateAccountPage from "../pages/CreateAccountPage.jsx";
 import ClientDashboardPage from "../pages/ClientDashboardPage.jsx";
+import ExchangePage from "../pages/ExchangePage.jsx";
 import PaymentPage from "../pages/PaymentPage.jsx";
 
 export default function AppRouter() {
@@ -48,6 +49,7 @@ export default function AppRouter() {
         <Route path="/payment" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
 
         <Route path="/accounts/:id" element={<ProtectedRoute><AccountDetailsPage /></ProtectedRoute>} />
+        <Route path="/exchange" element={<ProtectedRoute><ExchangePage /></ProtectedRoute>} />
 
       </Routes>
     </BrowserRouter>

@@ -45,17 +45,12 @@ export default function ChangePasswordPage() {
     try {
       setSubmitting(true);
 
-<<<<<<< feature/izgled
-      const urlParams = new URLSearchParams(window.location.search);
-      const token = urlParams.get("token") || "";
 
-      await confirmPasswordReset(token, newPassword);
-=======
       await confirmPasswordReset({
         token,
         password: newPassword,
       });
->>>>>>> main
+
 
       setSuccessMessage("Lozinka uspešno promenjena.");
       setNewPassword("");
@@ -68,14 +63,11 @@ export default function ChangePasswordPage() {
 
     } catch (error) {
       setSubmitError(
-<<<<<<< feature/izgled
+
         error instanceof Error
           ? error.message
           : "Greška pri promeni lozinke."
-=======
-        error?.response?.data?.message ||
-        "Greška pri promeni lozinke."
->>>>>>> main
+
       );
     } finally {
       setSubmitting(false);
@@ -87,7 +79,7 @@ export default function ChangePasswordPage() {
       <img src="/bank-logo.png" alt="logo" className="bank-logo" />
       <img src="/menu-icon.png" alt="menu" className="menu-icon" />
 
-<<<<<<< feature/izgled
+
       {/* STARO: cp-page-center + cp-card sa bež karticom */}
       {/* NOVO: isti dark card sistem kao create/edit/details */}
       <div className="cp-page">
@@ -124,23 +116,7 @@ export default function ChangePasswordPage() {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="unesite novu lozinku..."
-=======
-      <div className="cp-page-center">
-        <div className="cp-card">
-          <h2 className="cp-title">Promena lozinke</h2>
 
-          <form onSubmit={handleSubmit}>
-            <div className="cp-fields">
-
-              <div className="cp-field">
-                <label className="cp-label">Nova lozinka</label>
-                <input
-                  className="cp-input"
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="••••••••"
->>>>>>> main
                   required
                 />
               </div>
@@ -148,19 +124,13 @@ export default function ChangePasswordPage() {
               <div className="cp-field">
                 <label className="cp-label">Potvrdite novu lozinku</label>
                 <input
-<<<<<<< feature/izgled
+
                   className={`cp-input ${matchError ? "cp-input-error" : ""}`}
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="potvrdite novu lozinku..."
-=======
-                  className="cp-input"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
->>>>>>> main
+
                   required
                 />
               </div>
@@ -182,25 +152,13 @@ export default function ChangePasswordPage() {
             </div>
 
             <div className="cp-actions">
-<<<<<<< feature/izgled
+
               {/* STARO: cp-btn-back + cp-btn-submit */}
               {/* NOVO: shared dark/blue button family */}
               <button
                 type="submit"
                 className="cp-btn cp-btn-primary"
-=======
-              <button
-                type="button"
-                className="cp-btn-back"
-                onClick={() => navigate("/login")}
-              >
-                Nazad
-              </button>
 
-              <button
-                type="submit"
-                className="cp-btn-submit"
->>>>>>> main
                 disabled={submitting}
               >
                 {submitting ? "Čuvanje..." : "Promeni lozinku"}

@@ -10,6 +10,9 @@ import ChangePasswordPage from "../pages/ChangePasswordPage.jsx";
 import CardsPage from "../pages/CardsPage.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import BusinessDetailsPage from "../pages/BusinessDetailsPage.jsx";
+import CreateBusinessAccountPage from "../pages/CreateBusinessAccountPage";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage.jsx";
+import EnterTokenPage from "../pages/EnterTokenPage.jsx";
 import AccountDetailsPage from "../pages/AccountDetailsPage.jsx";
 import CreateAccountPage from "../pages/CreateAccountPage.jsx";
 import ClientDashboardPage from "../pages/ClientDashboardPage.jsx";
@@ -22,13 +25,14 @@ export default function AppRouter() {
         <Route path="/" element={<Navigate to="/login" />} />
 
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/enter-token" element={<EnterTokenPage />} />
+        <Route path="/change-password" element={<ChangePasswordPage />} />
+
         <Route path="/dashboard" element={<ProtectedRoute><ClientDashboardPage /></ProtectedRoute>} />
 
-<<<<<<< feature/client_loan_overview
         <Route path="/loans" element={<ProtectedRoute><LoanOverview /></ProtectedRoute>} />
-=======
         <Route path="/accounts/create" element={<ProtectedRoute><CreateAccountPage /></ProtectedRoute>} />
->>>>>>> main
         <Route path="/employees" element={<ProtectedRoute><EmployeesPage /></ProtectedRoute>} />
         <Route path="/employees/create" element={<ProtectedRoute><CreateEmployeePage /></ProtectedRoute>} />
         <Route path="/employees/edit/:id" element={<ProtectedRoute><EditEmployeePage /></ProtectedRoute>} />

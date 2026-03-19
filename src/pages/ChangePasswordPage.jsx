@@ -47,7 +47,10 @@ export default function ChangePasswordPage() {
     try {
       setSubmitting(true);
 
-      await confirmPasswordReset(token, newPassword);
+      await confirmPasswordReset({
+        token,
+        password: newPassword,
+      });
 
       setSuccessMessage("Lozinka uspešno promenjena.");
       setNewPassword("");
@@ -60,8 +63,9 @@ export default function ChangePasswordPage() {
 
     } catch (error) {
       setSubmitError(
-        error?.response?.data?.message ||
-        "Greška pri promeni lozinke."
+        error instanceof Error
+          ? error.message
+          : "Greška pri promeni lozinke."
       );
     } finally {
       setSubmitting(false);

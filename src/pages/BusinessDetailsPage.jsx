@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./BusinessDetailsPage.css";
+import Sidebar from "../components/Sidebar.jsx";
 import { getAccountDetails } from "../services/BusinessService";
 
 const BusinessAccountDetailsPage = () => {
@@ -36,6 +37,7 @@ const BusinessAccountDetailsPage = () => {
 
   return (
     <div className="business-container">
+      <Sidebar/>
       <div className="header">
         <div>
           <p className="welcome">Dobrodošli,</p>

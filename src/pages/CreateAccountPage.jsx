@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createAccount } from "../services/AccountService";
 import { getCurrentUserId } from "../services/AuthService";
+import Sidebar from "../components/Sidebar.jsx";
 import "./CreateAccountPage.css";
 
 const ACCOUNT_TYPES = [
@@ -181,6 +182,7 @@ export default function CreateAccountPage() {
 
     return (
         <div className="ca-shell">
+            <Sidebar/>
             <div className="ca-content">
 
                 {/* Header */}

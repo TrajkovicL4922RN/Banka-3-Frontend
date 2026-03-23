@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { transferFunds } from "../services/TransactionService";
+import Sidebar from "../components/Sidebar.jsx";
 import "./PaymentPage.css";
 
 const EMPTY_FORM = {
@@ -90,6 +91,7 @@ export default function PaymentPage() {
 
     return (
         <div className="pay-shell">
+            <Sidebar/>
             <div className="pay-content">
 
                 {/* Header */}

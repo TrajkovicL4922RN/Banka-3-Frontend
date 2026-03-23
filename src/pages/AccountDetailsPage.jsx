@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAccountById, getAccountTransactions } from "../services/AccountService";
+import Sidebar from "../components/Sidebar.jsx";
 import "./AccountDetailsPage.css";
 
 function fmt(amount, currency = "RSD") {
@@ -101,7 +102,7 @@ export default function AccountDetailsPage() {
     return (
         <div className="ad-page">
             <div className="ad-content">
-
+                <Sidebar/>
                 {/* ── HEADER ── */}
                 <div className="ad-header">
                     <button className="ad-back-btn" onClick={() => navigate("/accounts")}>

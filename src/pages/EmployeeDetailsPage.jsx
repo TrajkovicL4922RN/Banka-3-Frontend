@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getEmployeeById } from "../services/EmployeeService";
-import MenuDropdown from "../components/MenuDropdown";
+import Sidebar from "../components/Sidebar.jsx";
 import "./EmployeeDetailsPage.css";
 
 export default function EmployeeDetailsPage() {
@@ -47,7 +47,7 @@ export default function EmployeeDetailsPage() {
     return (
       <div className="page-bg">
         <img src="/bank-logo.png" alt="logo" className="bank-logo" />
-        <MenuDropdown />
+        <Sidebar />
 
         <div className="profile-page">
           <div className="profile-card profile-state-card">
@@ -62,7 +62,7 @@ export default function EmployeeDetailsPage() {
     return (
       <div className="page-bg">
         <img src="/bank-logo.png" alt="logo" className="bank-logo" />
-        <MenuDropdown />
+        <Sidebar />
 
         <div className="profile-page">
           <div className="profile-card profile-state-card">
@@ -78,7 +78,7 @@ export default function EmployeeDetailsPage() {
   return (
     <div className="page-bg">
       <img src="/bank-logo.png" alt="logo" className="bank-logo" />
-      <MenuDropdown />
+      <Sidebar />
 
       <div className="profile-page">
         <div className="profile-card">

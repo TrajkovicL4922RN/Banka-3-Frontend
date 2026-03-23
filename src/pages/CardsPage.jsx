@@ -4,6 +4,7 @@ import { getCurrentUserId } from "../services/AuthService";
 import CardsList from "../components/cards/CardsList";
 import CreateCardForm from "../components/cards/CreateCardForm";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar.jsx";
 import "./CardsPage.css";
 
 function CardsPage() {
@@ -76,6 +77,7 @@ function CardsPage() {
 
   return (
     <div className="cards-page">
+      <Sidebar/>
       <div className="cards-container">
         <h1>Moje kartice</h1>
 

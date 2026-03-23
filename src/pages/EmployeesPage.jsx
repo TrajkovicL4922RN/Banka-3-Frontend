@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import EmployeeTable from "../components/employees/EmployeeTable";
 import { getEmployees } from "../services/EmployeeService";
-import MenuDropdown from "../components/MenuDropdown";
+import Sidebar from "../components/Sidebar.jsx";
 import "./EmployeesPage.css";
 
 function EmployeesPage() {
@@ -70,7 +70,7 @@ function EmployeesPage() {
     return (
       <div className="page-bg">
         <img src="/bank-logo.png" alt="logo" className="bank-logo" />
-        <MenuDropdown />
+        <Sidebar />
         <div className="content-wrapper">
           <p>Učitavanje...</p>
         </div>
@@ -82,7 +82,7 @@ function EmployeesPage() {
     return (
       <div className="page-bg">
         <img src="/bank-logo.png" alt="logo" className="bank-logo" />
-        <MenuDropdown />
+        <Sidebar />
         <div className="content-wrapper">
           <p style={{ color: "#e74c3c" }}>{error}</p>
         </div>
@@ -93,7 +93,7 @@ function EmployeesPage() {
   return (
     <div className="page-bg">
       <img src="/bank-logo.png" alt="logo" className="bank-logo" />
-      <MenuDropdown />
+      <Sidebar />
 
       <div className="content-wrapper">
         <div className="employee-card">

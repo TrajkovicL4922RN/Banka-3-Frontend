@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getTransactions } from "../services/PaymentService";
-import MenuDropdown from "../components/MenuDropdown";
+import Sidebar from "../components/Sidebar.jsx";
 import "./PaymentsPage.css";
 
 // ─── Helpers ────────────────────────────────────────────────
@@ -39,6 +39,7 @@ function PaymentDetail({ tx, onBack }) {
 
   return (
     <div className="pp-content">
+        <Sidebar/>
       <div className="pp-top-row">
         <button className="pp-back-btn" onClick={onBack}>‹</button>
         <span className="pp-section-title">Detalji plaćanja</span>
@@ -185,7 +186,7 @@ export default function PaymentsPage() {
   return (
     <div className="pp-bg">
       <img src="/bank-logo.png" alt="logo" className="pp-logo" />
-      <MenuDropdown />
+      <Sidebar />
 
       <div className="pp-wrapper">
         {/* Page header */}

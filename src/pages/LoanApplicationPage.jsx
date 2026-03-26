@@ -1,73 +1,66 @@
 import { useState } from "react"
 import Sidebar from "../components/Sidebar.jsx";
+import { createLoanRequest } from "../services/LoanService.js";
 import "./LoanApplicationPage.css"
 
 export default function CreateLoanRequestPage(){
 
-  const [amount,setAmount] = useState("")
-  const [period,setPeriod] = useState("")
-  const [monthlyRate,setMonthlyRate] = useState(null)
-  const [error,setError] = useState("")
-  const [success,setSuccess] = useState("")
-  const [loading,setLoading] = useState(false)
+  const [amount, setAmount] = useState("")
+  const [period, setPeriod] = useState("")
+  const [monthlyRate, setMonthlyRate] = useState(null)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  const calculateRate = (a,p)=>{
-    if(a>0 && p>0){
-      setMonthlyRate((a/p).toFixed(2))
-    }else{
+  const calculateRate = (a, p) => {
+    if (a > 0 && p > 0) {
+      setMonthlyRate((a / p).toFixed(2))
+    } else {
       setMonthlyRate(null)
     }
   }
 
-  const mockLoanRequest = (data)=>{
-    return new Promise((resolve,reject)=>{
-      setTimeout(()=>{
-        if(data.amount && data.period){
-          resolve({status:"ok"})
-        }else{
-          reject(new Error("Greška prilikom slanja zahteva"))
-        }
-      },900)
-    })
-  }
-
-  const handleSubmit = async (e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
     setSuccess("")
 
-    if(!amount || !period){
+    if (!amount || !period) {
       setError("Sva polja su obavezna.")
       return
     }
 
-    if(amount <= 0 || period <= 0){
+    if (amount <= 0 || period <= 0) {
       setError("Vrednosti moraju biti veće od nule.")
       return
     }
 
-    try{
+    try {
       setLoading(true)
-      await mockLoanRequest({ amount:Number(amount), period:Number(period) })
+      await createLoanRequest({ 
+        amount: Number(amount), 
+        period: Number(period) 
+      })
       setSuccess("Zahtev za kredit je uspešno podnet.")
       setAmount("")
       setPeriod("")
       setMonthlyRate(null)
-    }catch(err){
-      setError(err.message)
-    }finally{
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || "Greška pri slanju zahteva.")
+      console.error("Error submitting loan request:", err)
+    } finally {
       setLoading(false)
     }
   }
 
-  const handleAmountChange = (value)=>{
+  const handleAmountChange = (value) => {
     setAmount(value)
-    calculateRate(value,period)
+    calculateRate(value, period)
   }
 
-  const handlePeriodChange = (value)=>{
+  const handlePeriodChange = (value) => {
     setPeriod(value)
-    calculateRate(amount,value)
+    calculateRate(amount, value)
   }
 
   return(

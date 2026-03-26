@@ -1,26 +1,48 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar.jsx";
+import { getLoans } from "../services/LoanService.js";
 import "./LoanOverview.css";
 
 export default function LoanOverview() {
   const [loans, setLoans] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const mockLoans = [
-    { id: 1, amount: 10000, repaymentPeriod: 60, monthlyInstallment: 210, status: "APPROVED" },
-    { id: 2, amount: 5000,  repaymentPeriod: 36, monthlyInstallment: 155, status: "PENDING" },
-    { id: 3, amount: 8000,  repaymentPeriod: 48, monthlyInstallment: 190, status: "REJECTED" },
-  ];
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoans(mockLoans);
-      setLoading(false);
-    }, 400);
+    let cancelled = false;
+    const loadLoans = async () => {
+      try {
+        const data = await getLoans();
+        if (!cancelled) {
+          setLoans(data);
+          setError("");
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError("Greška pri učitavanju kredita.");
+          console.error("Error loading loans:", err);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+    loadLoans();
+    return () => { cancelled = true; };
   }, []);
 
   if (loading) {
     return <div className="lov-loading">Učitavanje kredita...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="lov-page">
+        <Sidebar />
+        <div className="lov-loading" style={{ color: "red" }}>{error}</div>
+      </div>
+    );
   }
 
   return (
@@ -30,30 +52,34 @@ export default function LoanOverview() {
         <h1 className="lov-title">Moji krediti</h1>
 
         <div className="lov-grid">
-          {loans.map((loan) => (
-              <div key={loan.id} className="lov-card">
+          {loans && loans.length > 0 ? (
+            loans.map((loan) => (
+                <div key={loan.id} className="lov-card">
 
-                <div className={`lov-status ${loan.status}`}>
-                  {loan.status}
-                </div>
-
-                <div className="lov-amount">
-                  {loan.amount.toLocaleString()} €
-                </div>
-
-                <div className="lov-info">
-                  <div>
-                    <span>Rok otplate</span>
-                    <strong>{loan.repaymentPeriod} meseci</strong>
+                  <div className={`lov-status ${loan.status}`}>
+                    {loan.status}
                   </div>
-                  <div>
-                    <span>Mesečna rata</span>
-                    <strong>{loan.monthlyInstallment} €</strong>
-                  </div>
-                </div>
 
-              </div>
-          ))}
+                  <div className="lov-amount">
+                    {loan.amount.toLocaleString()} €
+                  </div>
+
+                  <div className="lov-info">
+                    <div>
+                      <span>Rok otplate</span>
+                      <strong>{loan.repaymentPeriod} meseci</strong>
+                    </div>
+                    <div>
+                      <span>Mesečna rata</span>
+                      <strong>{loan.monthlyInstallment} €</strong>
+                    </div>
+                  </div>
+
+                </div>
+            ))
+          ) : (
+            <p>Nema dostupnih kredita.</p>
+          )}
         </div>
       </div>
   );

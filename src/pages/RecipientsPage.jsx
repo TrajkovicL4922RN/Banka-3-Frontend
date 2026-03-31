@@ -38,7 +38,10 @@ export default function RecipientsPage() {
         <div className="rp-page-header">
           <h2 className="rp-page-title">Primaoci</h2>
           <div className="rp-header-actions">
-            <button className="rp-secondary-btn" onClick={() => navigate("/payments")}>
+            <button
+                className="rp-secondary-btn"
+                onClick={() => navigate("/payments", { state: { from: "recipients" } })}
+            >
               Istorija plaćanja →
             </button>
             <button className="rp-new-btn" onClick={() => navigate("/payments/new")}>

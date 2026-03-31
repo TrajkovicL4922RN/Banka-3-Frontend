@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getTransactions } from "../services/PaymentService";
 import MenuDropdown from "../components/MenuDropdown";
 import "./PaymentsPage.css";
@@ -403,6 +403,10 @@ export default function PaymentsPage() {
   const [selectedTx, setSelectedTx]     = useState(null);
   const [loading, setLoading]           = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const backTarget =
+      location.state?.from === "recipients" ? "/recipients" : "/dashboard";
 
   useEffect(() => {
     async function load() {
@@ -422,9 +426,15 @@ export default function PaymentsPage() {
         {/* Page header */}
         <div className="pp-page-header">
           <div className="pp-title-row">
-            <button className="pp-nav-back-btn" onClick={() => { setSelectedTx(null); navigate("/recipients"); }}>
-              ‹
-            </button>
+              <button
+                  className="pp-nav-back-btn"
+                  onClick={() => {
+                      setSelectedTx(null);
+                      navigate(backTarget);
+                  }}
+              >
+                  ‹
+              </button>
             <h2 className="pp-page-title">
               {selectedTx ? "Detalji plaćanja" : "Pregled plaćanja"}
             </h2>

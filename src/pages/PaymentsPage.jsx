@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getTransactions } from "../services/PaymentService";
 import Sidebar from "../components/Sidebar.jsx";
 import "./PaymentsPage.css";
@@ -15,6 +15,233 @@ function formatDate(timestamp) {
         hour: "2-digit", minute: "2-digit",
     });
 }
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+function buildPaymentReceiptHtml(tx, statusLabel) {
+    const amount = fmt(tx.final_amount, tx.currency);
+    const fee = tx.fee > 0 ? fmt(tx.fee, tx.currency) : "0,00 " + (tx.currency || "RSD");
+    const formattedDate = formatDate(tx.timestamp);
+
+    return `
+    <!DOCTYPE html>
+    <html lang="sr">
+      <head>
+        <meta charset="UTF-8" />
+        <title>Potvrda o plaćanju</title>
+        <style>
+          * {
+            box-sizing: border-box;
+          }
+
+          body {
+            margin: 0;
+            padding: 32px;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #ffffff;
+            color: #111827;
+          }
+
+          .receipt {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #d1d5db;
+            border-radius: 16px;
+            overflow: hidden;
+          }
+
+          .receipt-header {
+            padding: 24px 28px;
+            background: #0f172a;
+            color: #f8fafc;
+          }
+
+          .receipt-header h1 {
+            margin: 0 0 6px;
+            font-size: 28px;
+            line-height: 1.2;
+          }
+
+          .receipt-header p {
+            margin: 0;
+            font-size: 14px;
+            color: #cbd5e1;
+          }
+
+          .receipt-amount {
+            padding: 24px 28px 12px;
+            border-bottom: 1px solid #e5e7eb;
+          }
+
+          .receipt-amount-label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 8px;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+          }
+
+          .receipt-amount-value {
+            display: block;
+            font-size: 34px;
+            font-weight: 800;
+            color: #111827;
+          }
+
+          .receipt-section {
+            padding: 16px 28px 24px;
+          }
+
+          .receipt-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 18px;
+          }
+
+          .receipt-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px 16px;
+            min-height: 74px;
+          }
+
+          .receipt-label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 6px;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+          }
+
+          .receipt-value {
+            display: block;
+            font-size: 14px;
+            color: #111827;
+            font-weight: 600;
+            word-break: break-word;
+          }
+
+          .receipt-footer {
+            padding: 18px 28px 26px;
+            color: #6b7280;
+            font-size: 12px;
+            border-top: 1px solid #e5e7eb;
+          }
+
+          @media print {
+            body {
+              padding: 0;
+            }
+
+            .receipt {
+              border: none;
+              border-radius: 0;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="receipt">
+          <div class="receipt-header">
+            <h1>Potvrda o plaćanju</h1>
+            <p>Pregled detalja izabrane transakcije</p>
+          </div>
+
+          <div class="receipt-amount">
+            <span class="receipt-amount-label">Ukupan iznos</span>
+            <span class="receipt-amount-value">${escapeHtml(amount)}</span>
+          </div>
+
+          <div class="receipt-section">
+            <div class="receipt-grid">
+              <div class="receipt-item">
+                <span class="receipt-label">Račun primaoca</span>
+                <span class="receipt-value">${escapeHtml(tx.to_account)}</span>
+              </div>
+
+              <div class="receipt-item">
+                <span class="receipt-label">Račun platioca</span>
+                <span class="receipt-value">${escapeHtml(tx.from_account)}</span>
+              </div>
+
+              <div class="receipt-item">
+                <span class="receipt-label">Svrha plaćanja</span>
+                <span class="receipt-value">${escapeHtml(tx.purpose)}</span>
+              </div>
+
+              <div class="receipt-item">
+                <span class="receipt-label">Status</span>
+                <span class="receipt-value">${escapeHtml(statusLabel)}</span>
+              </div>
+
+              <div class="receipt-item">
+                <span class="receipt-label">Šifra plaćanja</span>
+                <span class="receipt-value">${escapeHtml(tx.payment_code)}</span>
+              </div>
+
+              <div class="receipt-item">
+                <span class="receipt-label">Poziv na broj</span>
+                <span class="receipt-value">${escapeHtml(tx.reference_number)}</span>
+              </div>
+
+              <div class="receipt-item">
+                <span class="receipt-label">Naknada</span>
+                <span class="receipt-value">${escapeHtml(fee)}</span>
+              </div>
+
+              <div class="receipt-item">
+                <span class="receipt-label">Datum i vreme</span>
+                <span class="receipt-value">${escapeHtml(formattedDate)}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="receipt-footer">
+            Ova potvrda je generisana iz aplikacije za pregled plaćanja.
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+}
+
+function handlePrintPaymentReceipt(tx, statusLabel) {
+    const printWindow = window.open("", "_blank", "width=900,height=700");
+
+    if (!printWindow) {
+        window.alert("Pregledač je blokirao otvaranje prozora za štampu.");
+        return;
+    }
+
+    const html = buildPaymentReceiptHtml(tx, statusLabel);
+
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+
+    printWindow.focus();
+
+    const triggerPrint = () => {
+        printWindow.print();
+    };
+
+    if (printWindow.document.readyState === "complete") {
+        setTimeout(triggerPrint, 150);
+    } else {
+        printWindow.onload = () => setTimeout(triggerPrint, 150);
+    }
+}
+
 
 const STATUS_CFG = {
     Realizovano:  { color: "#34d399", bg: "rgba(52,211,153,0.12)",  label: "Izvršeno", icon: (
@@ -35,18 +262,8 @@ const FILTERS = [
     { key: "Odbijeno",    label: "Odbijeno", match: "Odbijeno" },
 ];
 
-const BackArrow = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="15 18 9 12 15 6"/>
-    </svg>
-);
 
-const PrintIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
-    </svg>
-);
-
+// ─── Payment detail ──────────────────────────────────────────
 function PaymentDetail({ tx, onBack }) {
   const cfg = STATUS_CFG[tx.status] ?? STATUS_CFG["Realizovano"];
 
@@ -89,9 +306,12 @@ function PaymentDetail({ tx, onBack }) {
         ))}
       </div>
 
-      <button className="pp-print-btn">
-        🖨&nbsp; Štampaj potvrdu
-      </button>
+        <button
+            className="pp-print-btn"
+            onClick={() => handlePrintPaymentReceipt(tx, cfg.label)}
+        >
+            🖨&nbsp; Štampaj potvrdu
+        </button>
     </div>
   );
 }
@@ -181,6 +401,10 @@ export default function PaymentsPage() {
   const [selectedTx, setSelectedTx]     = useState(null);
   const [loading, setLoading]           = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const backTarget =
+      location.state?.from === "recipients" ? "/recipients" : "/dashboard";
 
   useEffect(() => {
     async function load() {
@@ -204,7 +428,7 @@ export default function PaymentsPage() {
                   className="pp-nav-back-btn"
                   onClick={() => {
                       setSelectedTx(null);
-                      navigate("/dashboard");
+                      navigate(backTarget);
                   }}
               >
                   ‹

@@ -22,7 +22,7 @@ export default function CreateClientPage() {
       setMsg({ type: "success", text: "Klijent kreiran! Email za aktivaciju je poslat." });
       setTimeout(() => navigate("/clients"), 2000);
     } catch (err) {
-      setMsg({ type: "error", text: "Greška pri kreiranju klijenta." });
+      setMsg({ type: "error", text: "Greška pri kreiranju klijenta." + (err.response?.data?.message || "") });
     } finally { setLoading(false); }
   };
 

@@ -80,6 +80,6 @@ export const getPermissions = () => {
 };
 
 export function clearClientCache() {
-  clientCache = null;
-  clientCacheEmail = null;
+  const clientCache = null;
+  const clientCacheEmail = null;
 }

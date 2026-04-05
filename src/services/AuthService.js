@@ -1,5 +1,4 @@
 import api from "./api.js";
-import { clearClientCache } from "./ClientService.js";
 
 export const login = async (email, password) => {
   const response = await api.post("/login", { email, password });
@@ -79,3 +78,8 @@ export const getPermissions = () => {
     return [];
   }
 };
+
+export function clearClientCache() {
+  clientCache = null;
+  clientCacheEmail = null;
+}

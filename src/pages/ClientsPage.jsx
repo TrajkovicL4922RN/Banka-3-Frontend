@@ -95,12 +95,11 @@ export default function ClientsPage() {
                 <div className="employee-card client-card-shell">
                     <div className="employee-topbar">
                         <div className="employee-title-block">
-                            <p className="employee-eyebrow">UPRAVLJANJE KLIJENTIMA</p>
                             <h1>Klijenti</h1>
-                            <p className="employee-subtitle">
-                                Pregled, pretraga i otvaranje detalja klijenata banke.
-                            </p>
                         </div>
+                        <button className="add-btn" onClick={() => navigate("/clients/create")}>
+                            + Dodaj klijenta
+                        </button>
                     </div>
 
                     <div className="employee-toolbar">

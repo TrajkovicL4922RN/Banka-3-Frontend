@@ -58,7 +58,19 @@ export async function getCurrentClient(email) {
 }
 
 // OVO JE FUNKCIJA KOJA JE NEDOSTAJALA:
-export function clearClientCache() {
-  clientCache = null;
-  clientCacheEmail = null;
+export async function createClient(data) {
+  const payload = {
+    first_name: data.firstName,
+    last_name: data.lastName,
+    date_of_birth: data.dateOfBirth, // Šalje se kao Unix timestamp (int64)
+    gender: data.gender,
+    email: data.email,
+    phone_number: data.phoneNumber,
+    address: data.address
+    // password je izbačen!
+  };
+
+  const response = await api.post("/clients", payload);
+  return response.data;
 }
+

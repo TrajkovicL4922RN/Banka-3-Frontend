@@ -1,8 +1,5 @@
 import api from "./api.js";
 
-let clientCache = null;
-let clientCacheEmail = null;
-
 export const login = async (email, password) => {
   const response = await api.post("/login", { email, password });
   
@@ -83,6 +80,4 @@ export const getPermissions = () => {
 };
 
 export function clearClientCache() {
-    clientCache = null;
-    clientCacheEmail = null;
 }
